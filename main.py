@@ -35,6 +35,12 @@ def main() -> None:
     os.chmod(OUTPUT_PATH, 0o644)
     os.chmod(OUTPUT_DIR, 0o755)
 
+    # Read back what we wrote: the entry is only good if the bytes on disk
+    # are exactly the username, nothing more.
+    with open(OUTPUT_PATH, "rb") as handle:
+        if handle.read() != payload:
+            raise ValueError("entry.txt does not hold exactly the username")
+
 
 if __name__ == "__main__":
     main()
